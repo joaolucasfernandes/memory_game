@@ -20,6 +20,8 @@ let matched = [];
 let moves = 0;
 const movesCounter = document.querySelector('.moves');
 const board = document.querySelector(".deck");
+const starHTML = '<li><i class="fa fa-star"></i></li>';
+const starsContainer = document.querySelector('.stars');
 
 /**
  * Starting the game and shuffling the cards.
@@ -34,6 +36,24 @@ function startGame(){
         board.appendChild(card);
         clickOnCards(card);   
     }
+}
+
+/**
+ * Rating function 
+ */
+function rating(moves){
+   if(moves <= 10 && matched.length >= 2){
+       createStar();
+   }
+}
+
+/**
+ * Structure to add stars to the star counter
+ */
+function createStar(){
+    const structure = document.createElement('li');
+    structure.innerHTML = '<i class="fa fa-star"></i>';
+    starsContainer.appendChild(structure);
 }
 
 /**
@@ -86,6 +106,9 @@ function compareCards(currentCard, previousCard){
     addMove();
 }
 
+/**
+ * Check if the game has ended
+ */
 function checkGameEnding(){
     if(matched.length === cardList.length){
         alert("Game Over!!");
@@ -93,9 +116,13 @@ function checkGameEnding(){
     }
 }
 
+/**
+ * Adding moves to the moves counter
+ */
 function addMove(){
     moves++;
     movesCounter.innerHTML = moves;
+    rating(moves);
 }
 
 /**
@@ -103,6 +130,7 @@ function addMove(){
  */
 function restartGame(){
     board.innerHTML = "";
+    starsContainer.innerHTML = "";
     startGame();
     matched = [];
     moves = 0;

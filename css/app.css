@@ -40,7 +40,7 @@ h1 {
 .deck {
     width: 660px;
     min-height: 680px;
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    background: linear-gradient(160deg, #7986f8 0%, #857692 100%);
     padding: 32px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
@@ -110,4 +110,8 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+.title-font{
+    font-family: 'Permanent Marker', cursive;
 }
