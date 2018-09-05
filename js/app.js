@@ -52,7 +52,7 @@ function rating(moves){
  */
 function createStar(){
     const structure = document.createElement('li');
-    structure.innerHTML = '<i class="fa fa-star"></i>';
+    structure.innerHTML = starHTML;
     starsContainer.appendChild(structure);
 }
 
