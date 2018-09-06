@@ -112,6 +112,15 @@ h1 {
     cursor: pointer;
 }
 
+.timer-container{
+    float: right;
+    padding-right: 5%;
+}
+
 .title-font{
     font-family: 'Permanent Marker', cursive;
+}
+
+.moves{
+    padding-right: 5%;
 }

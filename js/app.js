@@ -15,13 +15,22 @@ let cardList = [
 /**
  * Initializing variables. This includes: opened cards, matched cards, moves counter, moves counter on the screen and the board that the cards are disposed.
  */
-let opened = [];
-let matched = [];
-let moves = 0;
-const movesCounter = document.querySelector('.moves');
-const board = document.querySelector(".deck");
-const starHTML = '<li><i class="fa fa-star"></i></li>';
-const starsContainer = document.querySelector('.stars');
+let opened = [],
+    matched = [],
+    moves = 0,
+    hours,minutes,seconds,
+    totalTime = 0,
+    firstMove = true,
+    increment;
+
+
+const movesCounter = document.querySelector('.moves'),
+      board = document.querySelector(".deck"),
+      starHTML = '<li><i class="fa fa-star"></i></li>',
+      starsContainer = document.querySelector('.stars'),
+      secondsOnTheScreen = document.querySelector("#seconds"),
+      minutesOnTheScreen = document.querySelector("#minutes"),
+      hoursOnTheScreen   = document.querySelector("#hours"); 
 
 /**
  * Starting the game and shuffling the cards.
@@ -64,6 +73,11 @@ function clickOnCards(card){
 
         const currentCard = this;
         const previousCard = opened[0];
+
+        if(firstMove){
+            timerStart();
+            firstMove = false;
+        }
 
         if(opened.length === 1){
             
@@ -135,6 +149,15 @@ function restartGame(){
     matched = [];
     moves = 0;
     movesCounter.innerHTML = "0";    
+    hoursOnTheScreen.innerHTML = "00";
+    minutesOnTheScreen.innerHTML = "00";
+    secondsOnTheScreen.innerHTML = "00";
+    stopTimer();
+    firstMove = true;
+    hours = 0;
+    minutes = 0;
+    seconds = 0;
+    totalTime = 0;
 }
 
 /**
@@ -146,6 +169,43 @@ function activateResetFeature(){
         restartGame();
     });
 }
+
+/*
+ * Start the timer
+ */
+function timerStart() {
+
+    increment = setInterval(function() {
+
+        totalTime += 1;
+
+        calculateTime(totalTime);
+
+        secondsOnTheScreen.innerHTML = seconds < 10 ? "0" + seconds : seconds;
+        minutesOnTheScreen.innerHTML = minutes < 10 ? "0" + minutes : minutes;
+        hoursOnTheScreen.innerHTML   = hours < 10 ? "0" + hours : hours;
+
+    }, 1000);
+   
+}
+
+/*
+ * Calculate time
+ */
+function calculateTime(totalTime) {
+    hours   = Math.floor( totalTime / 60 / 60);
+    minutes = Math.floor( (totalTime / 60) % 60);
+    seconds = totalTime % 60;
+}
+
+/*
+ * Stop the timer
+ */
+function stopTimer() {
+    // Stop Timer
+    clearInterval(increment);
+}
+
 
 /*
  * Display the cards on the page
