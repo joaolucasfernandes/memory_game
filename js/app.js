@@ -1,19 +1,5 @@
-/*
-* Creating the cardlist
-*/
-let cardList = [
-    "fa fa-diamond", "fa fa-diamond",
-    "fa fa-paper-plane-o", "fa fa-paper-plane-o",
-    "fa fa-anchor","fa fa-anchor",
-    "fa fa-bolt","fa fa-bolt",
-    "fa fa-cube", "fa fa-cube",
-    "fa fa-leaf", "fa fa-leaf",
-    "fa fa-bicycle", "fa fa-bicycle",
-    "fa fa-bomb", "fa fa-bomb"
-];
-
 /**
- * Initializing variables. This includes: opened cards, matched cards, moves counter, moves counter on the screen and the board that the cards are disposed.
+ * Initializing variables
  */
 let opened = [],
     matched = [],
@@ -21,22 +7,36 @@ let opened = [],
     hours,minutes,seconds,
     totalTime = 0,
     firstMove = true,
-    increment;
-
+    increment,
+    ranking = 3,
+    cardList = [
+        "fa fa-diamond", "fa fa-diamond",
+        "fa fa-paper-plane-o", "fa fa-paper-plane-o",
+        "fa fa-anchor","fa fa-anchor",
+        "fa fa-bolt","fa fa-bolt",
+        "fa fa-cube", "fa fa-cube",
+        "fa fa-leaf", "fa fa-leaf",
+        "fa fa-bicycle", "fa fa-bicycle",
+        "fa fa-bomb", "fa fa-bomb"
+    ];
 
 const movesCounter = document.querySelector('.moves'),
-      board = document.querySelector(".deck"),
-      starHTML = '<li><i class="fa fa-star"></i></li>',
-      starsContainer = document.querySelector('.stars'),
-      secondsOnTheScreen = document.querySelector("#seconds"),
-      minutesOnTheScreen = document.querySelector("#minutes"),
-      hoursOnTheScreen   = document.querySelector("#hours"); 
+    board = document.querySelector(".deck"),
+    starHTML = '<li><i class="fa fa-star"></i></li>',
+    starsContainer = document.querySelector('.stars'),
+    secondsOnTheScreen = document.querySelector("#seconds"),
+    minutesOnTheScreen = document.querySelector("#minutes"),
+    hoursOnTheScreen   = document.querySelector("#hours"),
+    proRank = 10,
+    mediumRank = 16,
+    noobRank = 20; 
 
 /**
- * Starting the game and shuffling the cards.
+ * @description Starting the game and shuffling the cards.
  */
 function startGame(){
     activateResetFeature();
+    createStar(3);
     shuffledCards = shuffle(cardList);
     for(let i = 0; i < shuffledCards.length; i++){
         const card = document.createElement("li");
@@ -48,25 +48,21 @@ function startGame(){
 }
 
 /**
- * Rating function 
+ * @description Structure to add stars to the star counter
+ * @param {number} numberOfStars 
  */
-function rating(moves){
-   if(moves <= 10 && matched.length >= 2){
-       createStar();
-   }
+function createStar(numberOfStars){
+    starsContainer.innerHTML = "";
+    for(var i = 0; i < numberOfStars; i++){
+        const structure = document.createElement('li');
+        structure.innerHTML = starHTML;
+        starsContainer.appendChild(structure);
+    }
 }
 
 /**
- * Structure to add stars to the star counter
- */
-function createStar(){
-    const structure = document.createElement('li');
-    structure.innerHTML = starHTML;
-    starsContainer.appendChild(structure);
-}
-
-/**
- * Adding events when clicking on the cards
+ * @description Adding events when clicking on the cards, like compare, changing CSS, and more...
+ * @param {Element} card 
  */
 function clickOnCards(card){
     card.addEventListener("click", function(){
@@ -80,38 +76,38 @@ function clickOnCards(card){
         }
 
         if(opened.length === 1){
-            
-            card.classList.add("open", "show", "disable-card");
+            card.classList.add("open", "show", "disable-card", "animated", "wobble");
             opened.push(this);
             compareCards(currentCard, previousCard);
 
         }else{
-            currentCard.classList.add("open", "show", "disable-card");
+            currentCard.classList.add("open", "show", "disable-card", "animated", "wobble");
             opened.push(this);
         }
     }); 
 }
 
 /**
- * Comparing two opened cards
+ * @description Comparing two opened cards
+ * @param {Element} currentCard 
+ * @param {Element} previousCard 
  */
 function compareCards(currentCard, previousCard){
  
     if(currentCard.innerHTML === previousCard.innerHTML){
         
-        currentCard.classList.add("match");
-        previousCard.classList.add("match");
+        currentCard.classList.add("match", "animated", "rubberBand");
+        previousCard.classList.add("match", "animated","rubberBand");
         matched.push(currentCard, previousCard);
         opened = [];
         checkGameEnding();
 
     }else{
         
-        // wait 500 milliseconds to close the card after a mismatch
         setTimeout(function(){
-            currentCard.classList.remove("open", "show", "disable-card");
-            previousCard.classList.remove("open", "show","disable-card");
-        }, 150);
+            currentCard.classList.remove("open", "show", "disable-card", "animated", "wobble");
+            previousCard.classList.remove("open", "show","disable-card", "animated", "wobble");
+        }, 350);
         
         opened = [];
 
@@ -121,26 +117,27 @@ function compareCards(currentCard, previousCard){
 }
 
 /**
- * Check if the game has ended
+ * @description Check if the game has ended
  */
 function checkGameEnding(){
     if(matched.length === cardList.length){
-        alert("Game Over!!");
-        restartGame();
+        setTimeout(function () {
+            finishGame(moves, setRank(moves));
+        }, 500);
     }
 }
 
 /**
- * Adding moves to the moves counter
+ * @description Adding moves to the moves counter
  */
 function addMove(){
     moves++;
     movesCounter.innerHTML = moves;
-    rating(moves);
+    setRank(moves);
 }
 
 /**
- * Restarting the game and reseting all related data
+ * @description Restarting the game and reseting all related data
  */
 function restartGame(){
     board.innerHTML = "";
@@ -161,7 +158,44 @@ function restartGame(){
 }
 
 /**
- * Activating "restart game" feature and adding events to restart button
+ * @description Set the rank of the player and create the correspondent stars
+ * @param {number} moves 
+ */
+function setRank(moves) {
+	if (moves > proRank && moves < mediumRank) {
+		createStar(2);
+		ranking = 2;
+	} else if ((moves > mediumRank && moves < noobRank) || (moves > noobRank)) {
+		createStar(1);
+		ranking = 1;
+	}
+	return ranking;
+};
+
+/**
+ * @description Finish the game and show the end game modal
+ * @param {number} moves 
+ * @param {number} score 
+ */
+function finishGame(moves, score) {
+    stopTimer();
+	swal({
+		allowEscapeKey: false,
+		allowOutsideClick: false,
+		title: 'Congratulations! You Won!',
+		text: 'With ' + moves + ' Moves and ' + score + ' Stars in ' + totalTime + ' seconds!',
+		type: 'success',
+		confirmButtonColor: '#02ccba',
+		confirmButtonText: 'Play again!'
+	}).then(function (isConfirm) {
+		if (isConfirm) {
+			restartGame();
+		}
+	})
+}
+
+/**
+ * @description Activating "restart game" feature and adding events to restart button
  */
 function activateResetFeature(){
     resetBtn = document.querySelector('.restart');
@@ -170,8 +204,8 @@ function activateResetFeature(){
     });
 }
 
-/*
- * Start the timer
+/**
+ * @description Start the timer
  */
 function timerStart() {
 
@@ -189,8 +223,8 @@ function timerStart() {
    
 }
 
-/*
- * Calculate time
+/** 
+ * @description Calculate time
  */
 function calculateTime(totalTime) {
     hours   = Math.floor( totalTime / 60 / 60);
@@ -198,14 +232,13 @@ function calculateTime(totalTime) {
     seconds = totalTime % 60;
 }
 
-/*
- * Stop the timer
+/**
+ * @description Stop the timer
  */
 function stopTimer() {
     // Stop Timer
     clearInterval(increment);
 }
-
 
 /*
  * Display the cards on the page
@@ -213,7 +246,6 @@ function stopTimer() {
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
