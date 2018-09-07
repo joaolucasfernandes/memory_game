@@ -22,6 +22,5 @@ The project dependencies are:
  * [Animate CSS](https://daneden.github.io/animate.css/)
  * [Fontawesome](https://fontawesome.com/)
 
- #How to start the game
+ ## How to start the game
  Open ```index.html``` on the browser.
-
