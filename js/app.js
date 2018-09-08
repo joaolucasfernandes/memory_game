@@ -10,23 +10,23 @@ let opened = [],
     increment,
     ranking = 3,
     cardList = [
-        "fa fa-diamond", "fa fa-diamond",
-        "fa fa-paper-plane-o", "fa fa-paper-plane-o",
-        "fa fa-anchor","fa fa-anchor",
-        "fa fa-bolt","fa fa-bolt",
-        "fa fa-cube", "fa fa-cube",
-        "fa fa-leaf", "fa fa-leaf",
-        "fa fa-bicycle", "fa fa-bicycle",
-        "fa fa-bomb", "fa fa-bomb"
+        'fa fa-diamond', 'fa fa-diamond',
+        'fa fa-paper-plane-o', 'fa fa-paper-plane-o',
+        'fa fa-anchor','fa fa-anchor',
+        'fa fa-bolt','fa fa-bolt',
+        'fa fa-cube', 'fa fa-cube',
+        'fa fa-leaf', 'fa fa-leaf',
+        'fa fa-bicycle', 'fa fa-bicycle',
+        'fa fa-bomb', 'fa fa-bomb'
     ];
 
 const movesCounter = document.querySelector('.moves'),
-    board = document.querySelector(".deck"),
+    board = document.querySelector('.deck'),
     starHTML = '<li><i class="fa fa-star"></i></li>',
     starsContainer = document.querySelector('.stars'),
-    secondsOnTheScreen = document.querySelector("#seconds"),
-    minutesOnTheScreen = document.querySelector("#minutes"),
-    hoursOnTheScreen   = document.querySelector("#hours"),
+    secondsOnTheScreen = document.querySelector('#seconds'),
+    minutesOnTheScreen = document.querySelector('#minutes'),
+    hoursOnTheScreen   = document.querySelector('#hours'),
     proRank = 10,
     mediumRank = 16,
     noobRank = 20; 
@@ -39,8 +39,8 @@ function startGame(){
     createStar(3);
     shuffledCards = shuffle(cardList);
     for(let i = 0; i < shuffledCards.length; i++){
-        const card = document.createElement("li");
-        card.classList.add("card");
+        const card = document.createElement('li');
+        card.classList.add('card');
         card.innerHTML = `<i class="${shuffledCards[i]}"></i>` ;
         board.appendChild(card);
         clickOnCards(card);   
@@ -52,7 +52,7 @@ function startGame(){
  * @param {number} numberOfStars 
  */
 function createStar(numberOfStars){
-    starsContainer.innerHTML = "";
+    starsContainer.innerHTML = '';
     for(var i = 0; i < numberOfStars; i++){
         const structure = document.createElement('li');
         structure.innerHTML = starHTML;
@@ -65,7 +65,7 @@ function createStar(numberOfStars){
  * @param {Element} card 
  */
 function clickOnCards(card){
-    card.addEventListener("click", function(){
+    card.addEventListener('click', function(){
 
         const currentCard = this;
         const previousCard = opened[0];
@@ -76,12 +76,12 @@ function clickOnCards(card){
         }
 
         if(opened.length === 1){
-            card.classList.add("open", "show", "disable-card", "animated", "wobble");
+            card.classList.add('open', 'show', 'disable-card', 'animated', 'wobble');
             opened.push(this);
             compareCards(currentCard, previousCard);
 
         }else{
-            currentCard.classList.add("open", "show", "disable-card", "animated", "wobble");
+            currentCard.classList.add('open', 'show', 'disable-card', 'animated', 'wobble');
             opened.push(this);
         }
     }); 
@@ -96,8 +96,8 @@ function compareCards(currentCard, previousCard){
  
     if(currentCard.innerHTML === previousCard.innerHTML){
         
-        currentCard.classList.add("match", "animated", "rubberBand");
-        previousCard.classList.add("match", "animated","rubberBand");
+        currentCard.classList.add('match', 'animated', 'rubberBand');
+        previousCard.classList.add('match', 'animated','rubberBand');
         matched.push(currentCard, previousCard);
         opened = [];
         checkGameEnding();
@@ -105,8 +105,8 @@ function compareCards(currentCard, previousCard){
     }else{
         
         setTimeout(function(){
-            currentCard.classList.remove("open", "show", "disable-card", "animated", "wobble");
-            previousCard.classList.remove("open", "show","disable-card", "animated", "wobble");
+            currentCard.classList.remove('open', 'show', 'disable-card', 'animated', 'wobble');
+            previousCard.classList.remove('open', 'show','disable-card', 'animated', 'wobble');
         }, 350);
         
         opened = [];
@@ -140,15 +140,15 @@ function addMove(){
  * @description Restarting the game and reseting all related data
  */
 function restartGame(){
-    board.innerHTML = "";
-    starsContainer.innerHTML = "";
+    board.innerHTML = '';
+    starsContainer.innerHTML = '';
     startGame();
     matched = [];
     moves = 0;
-    movesCounter.innerHTML = "0";    
-    hoursOnTheScreen.innerHTML = "00";
-    minutesOnTheScreen.innerHTML = "00";
-    secondsOnTheScreen.innerHTML = "00";
+    movesCounter.innerHTML = '0';    
+    hoursOnTheScreen.innerHTML = '00';
+    minutesOnTheScreen.innerHTML = '00';
+    secondsOnTheScreen.innerHTML = '00';
     stopTimer();
     firstMove = true;
     hours = 0;
@@ -215,9 +215,9 @@ function timerStart() {
 
         calculateTime(totalTime);
 
-        secondsOnTheScreen.innerHTML = seconds < 10 ? "0" + seconds : seconds;
-        minutesOnTheScreen.innerHTML = minutes < 10 ? "0" + minutes : minutes;
-        hoursOnTheScreen.innerHTML   = hours < 10 ? "0" + hours : hours;
+        secondsOnTheScreen.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+        minutesOnTheScreen.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+        hoursOnTheScreen.innerHTML   = hours < 10 ? '0' + hours : hours;
 
     }, 1000);
    
